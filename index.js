@@ -7,9 +7,11 @@ const bot = new TelegramApi(token, {polling: true});
 // corsProxy();
 bot.on('message', msg => {
     const chatId = msg.chat.id;
-    const xhttp = solve(bot, chatId);
-    var price = '';
-
+    const xhttp = solve();
+    xhttp.onload = function(e) {
+        price = JSON.parse(xhttp.responseText).USDT_UAH.last_price;
+        bot.sendMessage(chatId, `price for USDT_UAH => ${price}`);
+    };
 });
 
 bot.on("polling_error", console.log);
@@ -41,11 +43,5 @@ function solve(bot, chatId){
     xhttp.open("GET", "http://127.0.0.1:8080/https://whitebit.com/api/v4/public/ticker", true);
     xhttp.setRequestHeader("X-Requested-With", "XMLHttpRequest");
     xhttp.send();
-
-    xhttp.onload = function(e) {
-        price = JSON.parse(xhttp.responseText).USDT_UAH.last_price;
-        bot.sendMessage(chatId, `price for USDT_UAH => ${price}`);
-    };
-
     return xhttp;
 }
