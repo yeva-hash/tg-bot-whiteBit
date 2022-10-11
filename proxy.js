@@ -15,4 +15,4 @@ const corsProxy = () => {
     });
 }
 
-export default port;
+module.port = port;
