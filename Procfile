@@ -1,2 +1,2 @@
 worker: npm start
-proxy: npm proxyScript
+proxy: npm run proxyScript
