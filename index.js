@@ -1,16 +1,16 @@
 const TelegramApi = require('node-telegram-bot-api');
 const token = '5729912995:AAFkVE7deugnVXqz9PTkxvXzBp_RyqPDLsk';
-const port = process.env.PORT || 8080;
 const bot = new TelegramApi(token, {polling: true});
+const {corsProxy} = require('./proxy.js')
 
-
-// corsProxy();
+corsProxy();
 bot.on('message', msg => {
     const chatId = msg.chat.id;
     const xhttp = solve();
     console.log('im here');
     xhttp.onload = function(e) {
         price = JSON.parse(xhttp.responseText).USDT_UAH.last_price;
+        console.log(price);
         bot.sendMessage(chatId, `price for USDT_UAH => ${price}`);
     };
 });
@@ -38,7 +38,7 @@ bot.on("polling_error", console.log);
 // };
 
 
-function solve(bot, chatId){
+function solve(){
     var XMLHttpRequest = require('xhr2');
     const xhttp = new XMLHttpRequest();
     console.log('and here')

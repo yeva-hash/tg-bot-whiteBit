@@ -5,7 +5,7 @@ var port = 8080;
 
 var cors_proxy = require('cors-anywhere');
 
-// const corsProxy = () => {
+const corsProxy = () => {
     cors_proxy.createServer({
         originWhitelist: [], // Allow all origins
         requireHeader: ['origin', 'x-requested-with'],
@@ -13,6 +13,6 @@ var cors_proxy = require('cors-anywhere');
     }).listen(port, host, function() {
         console.log('Running CORS Anywhere on ' + host + ':' + port);
     });
-// }
+}
 
-module.port = port;
+module.exports = {corsProxy};
