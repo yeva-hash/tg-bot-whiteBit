@@ -15,4 +15,4 @@ var cors_proxy = require('cors-anywhere');
     });
 // }
 
-// module.exports = {corsProxy};
+

@@ -1,6 +1,6 @@
 const TelegramApi = require('node-telegram-bot-api');
 const token = '5729912995:AAFkVE7deugnVXqz9PTkxvXzBp_RyqPDLsk';
-// const {corsProxy} = require('./proxy.js')
+const port = process.env.PORT || 8080;
 const bot = new TelegramApi(token, {polling: true});
 
 
@@ -40,7 +40,7 @@ bot.on("polling_error", console.log);
 function solve(bot, chatId){
     var XMLHttpRequest = require('xhr2');
     const xhttp = new XMLHttpRequest();
-    xhttp.open("GET", "http://127.0.0.1:8080/https://whitebit.com/api/v4/public/ticker", true);
+    xhttp.open("GET", "http://127.0.0.1:" + port + "/https://whitebit.com/api/v4/public/ticker", true);
     xhttp.setRequestHeader("X-Requested-With", "XMLHttpRequest");
     xhttp.send();
     return xhttp;
