@@ -37,9 +37,10 @@ bot.on("polling_error", console.log);
 // };
 
 
-function solve(bot, chatId){
+function solve(){
     var XMLHttpRequest = require('xhr2');
     const xhttp = new XMLHttpRequest();
+    console.log('the port is' + port);
     xhttp.open("GET", "http://127.0.0.1:" + port + "/https://whitebit.com/api/v4/public/ticker", true);
     xhttp.setRequestHeader("X-Requested-With", "XMLHttpRequest");
     xhttp.send();
