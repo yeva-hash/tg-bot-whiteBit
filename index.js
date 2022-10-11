@@ -8,6 +8,7 @@ const bot = new TelegramApi(token, {polling: true});
 bot.on('message', msg => {
     const chatId = msg.chat.id;
     const xhttp = solve();
+    console.log('im here');
     xhttp.onload = function(e) {
         price = JSON.parse(xhttp.responseText).USDT_UAH.last_price;
         bot.sendMessage(chatId, `price for USDT_UAH => ${price}`);
@@ -40,6 +41,7 @@ bot.on("polling_error", console.log);
 function solve(bot, chatId){
     var XMLHttpRequest = require('xhr2');
     const xhttp = new XMLHttpRequest();
+    console.log('and here')
     xhttp.open("GET", "http://127.0.0.1:8080/https://whitebit.com/api/v4/public/ticker", true);
     xhttp.setRequestHeader("X-Requested-With", "XMLHttpRequest");
     xhttp.send();
