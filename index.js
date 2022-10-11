@@ -1,7 +1,8 @@
 const TelegramApi = require('node-telegram-bot-api');
 const token = '5729912995:AAFkVE7deugnVXqz9PTkxvXzBp_RyqPDLsk';
-const port = process.env.PORT || 8080;
 const bot = new TelegramApi(token, {polling: true});
+import port from './proxy';
+console.log('imported port' + port);
 
 
 // corsProxy();
