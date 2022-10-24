@@ -67,7 +67,8 @@ function showPrice(chatId) {
     };
 }
 
-function start(chat) {
+async function start(chat) {
     var userName = chat.first_name && chat.first_name !== '' ? ', ' + chat.first_name : ''; 
-    return bot.sendMessage(chat.id, `Вітаю${userName}! У нашому боті ви зможете дізнатися фактичний курс валюти біржі WhiteBit:`, priceOptions);
+    await bot.sendMessage(chat.id, `Вітаю${userName}! У нашому боті ви зможете дізнатися фактичний курс валюти біржі WhiteBit:`, priceOptions);
+    return bot.sendMessage(chat.id, 'Телеграм канал: [link]');
 }
