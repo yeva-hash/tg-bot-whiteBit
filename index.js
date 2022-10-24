@@ -4,46 +4,70 @@ const bot = new TelegramApi(token, {polling: true});
 const {corsProxy} = require('./proxy.js')
 
 corsProxy();
-bot.on('message', msg => {
-    const chatId = msg.chat.id;
-    const xhttp = solve();
-    console.log('im here');
-    xhttp.onload = function(e) {
-        price = JSON.parse(xhttp.responseText).USDT_UAH.last_price;
-        console.log(price);
-        bot.sendMessage(chatId, `price for USDT_UAH => ${price}`);
-    };
+
+const priceOptions = {
+    reply_markup: JSON.stringify({
+        inline_keyboard: [
+            [{text: 'USDT-UAH', callback_data: 'usdt'}]
+        ]
+    })
+}
+
+const returnBack = {
+    reply_markup: JSON.stringify({
+        inline_keyboard: [
+            [{text: 'Назад', callback_data: 'return'}]
+        ]
+    })
+}
+
+bot.setMyCommands([
+    {command: '/usdt', description: 'Останній курс USDT-UAH'}
+])
+
+bot.on('callback_query', msg => {
+    const data = msg.data;
+    const chatId = msg.message.chat.id;
+
+    if (data === 'usdt') {
+        showPrice(chatId);
+    } else if (data === 'return') {
+        start(msg.message.chat);
+    }
+})
+
+bot.on('message', async msg => {
+    const chat = msg.chat;
+    if (msg.text === '/start') {
+        start(chat);
+    } else if (msg.text === '/usdt') {
+        showPrice(chat.id);
+    }
 });
 
 bot.on("polling_error", console.log);
 
-// function whiteBotAjax() {
-//     const endpoint = 'ticker'
-//     fetch(`https://cors-anywhere.herokuapp.com/https://whitebit.com/api/v4/public/ticker`)
-//     .then((response) => {
-//         return response.json();
-//     })
-//     .then((data) => {
-//         return JSON.stringify(data);
-//     });
-// }
-
-
-// xhttp.onreadystatechange = function() {
-//     if (this.readyState == 4 && this.status == 200) {
-//         whiteBotData = JSON.parse(xhttp.responseText);
-//         var price = whiteBotData.USDT_UAH.last_price;
-//         var a = null;
-//     }
-// };
-
-
-function solve(){
+function whiteBotAjax(){
     var XMLHttpRequest = require('xhr2');
     const xhttp = new XMLHttpRequest();
-    console.log('and here')
     xhttp.open("GET", "http://127.0.0.1:8080/https://whitebit.com/api/v4/public/ticker", true);
     xhttp.setRequestHeader("X-Requested-With", "XMLHttpRequest");
     xhttp.send();
     return xhttp;
+}
+
+function showPrice(chatId) {
+    const xhttp = whiteBotAjax();
+
+    xhttp.onload = async function(e) {
+        await bot.sendPhoto(chatId, 'https://media.exbase.io/images/wiki/GO9dfVij3sWt.jpg');
+
+        price = Number(JSON.parse(xhttp.responseText).USDT_UAH.last_price);
+        return bot.sendMessage(chatId, `Фактичний курс для валюти USDT-UAH: ${price.toFixed(2)}`, returnBack);
+    };
+}
+
+function start(chat) {
+    var userName = chat.first_name && chat.first_name !== '' ? ', ' + chat.first_name : ''; 
+    return bot.sendMessage(chat.id, `Вітаю${userName}! У нашому боті ви зможете дізнатися фактичний курс валюти біржі WhiteBit:`, priceOptions);
 }
